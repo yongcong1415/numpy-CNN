@@ -31,10 +31,14 @@ def conv_(img, conv_filter):
             Getting the current region to get multiplied with the filter.
             How to loop through the image and get the region based on 
             the image and filer sizes is the most tricky part of convolution.
+            每个滤波器在图像上迭代卷积的尺寸相同，通过以下代码实现：
             """
             curr_region = img[r-numpy.uint16(numpy.floor(filter_size/2.0)):r+numpy.uint16(numpy.ceil(filter_size/2.0)), 
                               c-numpy.uint16(numpy.floor(filter_size/2.0)):c+numpy.uint16(numpy.ceil(filter_size/2.0))]
             #Element-wise multipliplication between the current region and the filter.
+            '''
+            之后，在图像区域矩阵和滤波器之间对位相乘，并将结果求和以得到单值输出：
+            '''
             curr_result = curr_region * conv_filter
             conv_sum = numpy.sum(curr_result) #Summing the result of multiplication.
             result[r, c] = conv_sum #Saving the summation in the convolution layer feature map.
@@ -43,6 +47,10 @@ def conv_(img, conv_filter):
     final_result = result[numpy.uint16(filter_size/2.0):result.shape[0]-numpy.uint16(filter_size/2.0), 
                           numpy.uint16(filter_size/2.0):result.shape[1]-numpy.uint16(filter_size/2.0)]
     return final_result
+    '''
+    输入图像与每个滤波器卷积后，通过conv函数返回特征图。下图显示conv层返回的特征图（由于l1卷积层的滤波器参数为（2,3,3），
+    即2个3x3大小的卷积核，最终输出2个特征图）：
+    '''
 def conv(img, conv_filter):
     if len(img.shape) > 2 or len(conv_filter.shape) > 3: # Check if number of image channels matches the filter depth.
         if img.shape[-1] != conv_filter.shape[-1]:
